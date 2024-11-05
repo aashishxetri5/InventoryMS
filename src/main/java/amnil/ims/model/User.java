@@ -3,11 +3,11 @@ package amnil.ims.model;
 import amnil.ims.enums.Role;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Data
 @Entity
 public class User {
@@ -23,5 +23,12 @@ public class User {
 
     @ElementCollection(fetch = FetchType.LAZY)
     @Enumerated(EnumType.STRING)
-    private List<Role> userRole;
+    private Set<Role> roles;
+
+    public User(String fullname, String email, String password, Set<Role> roles) {
+        this.fullname = fullname;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
 }

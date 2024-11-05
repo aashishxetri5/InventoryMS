@@ -7,11 +7,12 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor
 @Data
-@Entity
+@NoArgsConstructor
+@Entity(name = "orders")
 public class Order {
 
     @Id
@@ -26,13 +27,12 @@ public class Order {
     private BigDecimal totalAmount;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name="product_id")
     private List<Product> products;
 
     public Order(LocalDate orderDate, OrderStatus orderStatus, BigDecimal totalAmount, List<Product> products) {
         this.orderDate = orderDate;
         this.orderStatus = orderStatus;
         this.totalAmount = totalAmount;
-        this.products = products;
+        this.products = (products == null) ? new ArrayList<>() : products;
     }
 }

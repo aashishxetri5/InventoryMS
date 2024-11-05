@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -25,6 +26,6 @@ public class Supplier {
     public Supplier(String supplierName, String contactInfo, List<Product> productBySupplier) {
         this.supplierName = supplierName;
         this.contactInfo = contactInfo;
-        this.productBySupplier = productBySupplier;
+        this.productBySupplier = (productBySupplier == null) ? new ArrayList<>() : productBySupplier;
     }
 }
