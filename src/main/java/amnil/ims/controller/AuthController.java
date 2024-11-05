@@ -42,7 +42,7 @@ public class AuthController {
         }
     }
 
-    @PreAuthorize("isAnonymous()")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignupRequest request) {
         try {
