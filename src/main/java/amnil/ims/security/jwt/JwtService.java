@@ -1,4 +1,4 @@
-package amnil.ims.utils;
+package amnil.ims.security.jwt;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -45,6 +45,8 @@ public class JwtService implements IJwtService {
 
         return Jwts.builder()
                 .subject(principalUser.getUsername())
+                .header().empty().add("typ", "JWT")
+                .and()
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSigningKey())

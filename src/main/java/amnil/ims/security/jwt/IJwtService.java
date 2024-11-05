@@ -1,4 +1,4 @@
-package amnil.ims.utils;
+package amnil.ims.security.jwt;
 
 import org.springframework.security.core.Authentication;
 
