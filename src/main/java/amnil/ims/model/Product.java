@@ -27,4 +27,11 @@ public class Product {
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
+    public Product(String productName, String description, BigDecimal price, int quantity, Supplier supplier) {
+        this.productName = productName;
+        this.description = description;
+        this.price = price;
+        this.quantity = quantity;
+        this.supplier = supplier;
+    }
 }
