@@ -1,10 +1,11 @@
 package amnil.ims.model;
 
+import amnil.ims.enums.Status;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -18,14 +19,20 @@ public class Supplier {
 
     private String supplierName;
 
-    private String contactInfo;
+    private String email;
+
+    private String phoneNumber;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Product> productBySupplier;
 
-    public Supplier(String supplierName, String contactInfo, List<Product> productBySupplier) {
+    public Supplier(@NonNull String supplierName, @NonNull String email, @NonNull String phoneNumber, @NonNull Status status) {
         this.supplierName = supplierName;
-        this.contactInfo = contactInfo;
-        this.productBySupplier = (productBySupplier == null) ? new ArrayList<>() : productBySupplier;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.status = status;
     }
 }
