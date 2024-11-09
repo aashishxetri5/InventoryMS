@@ -3,6 +3,7 @@ package amnil.ims.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 
@@ -25,6 +26,7 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id")
+    @ToString.Exclude
     private Supplier supplier;
 
     public Product(String productName, String description, BigDecimal price, int quantity, Supplier supplier) {
