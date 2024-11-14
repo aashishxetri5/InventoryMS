@@ -2,6 +2,8 @@ package amnil.ims.model;
 
 import amnil.ims.enums.OrderStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +14,8 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity(name = "orders")
 public class Order {
 
@@ -27,12 +31,5 @@ public class Order {
     private BigDecimal totalAmount;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Product> products;
-
-    public Order(LocalDate orderDate, OrderStatus orderStatus, BigDecimal totalAmount, List<Product> products) {
-        this.orderDate = orderDate;
-        this.orderStatus = orderStatus;
-        this.totalAmount = totalAmount;
-        this.products = (products == null) ? new ArrayList<>() : products;
-    }
+    private List<OrderItem> orderItems = new ArrayList<>();
 }
