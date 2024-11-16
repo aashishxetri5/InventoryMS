@@ -11,5 +11,11 @@ public interface IOrderService {
 
     List<OrderResponse> getAllOrders();
 
+    OrderResponse updateOrder(Long orderId, OrderRequest orderRequest);
+
     int importOrdersFromCsv(MultipartFile file);
+
+    byte[] exportOrdersToCsv();
+
+    void deleteOrderById(Long orderId);
 }

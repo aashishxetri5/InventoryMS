@@ -9,17 +9,23 @@ import amnil.ims.exception.NotFoundException;
 import amnil.ims.model.Order;
 import amnil.ims.model.OrderItem;
 import amnil.ims.model.Product;
+import amnil.ims.repository.OrderItemRepository;
 import amnil.ims.repository.OrderRepository;
 import amnil.ims.repository.ProductRepository;
 import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +38,7 @@ import java.util.stream.Collectors;
 public class OrderService implements IOrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
-
+    private final OrderItemRepository orderItemRepository;
 
     @Override
     @Transactional
@@ -40,7 +46,6 @@ public class OrderService implements IOrderService {
         Order order = orderRepository.save(prepareOrder(orderRequest));
         return convertToOrderResponse(order);
     }
-
 
     private OrderResponse convertToOrderResponse(Order order) {
 
@@ -113,6 +118,55 @@ public class OrderService implements IOrderService {
 
     @Transactional
     @Override
+    public OrderResponse updateOrder(Long orderId, OrderRequest orderRequest) {
+        // Fetch orders for the id. Throw NotFoundException if order doesn't exit.
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new NotFoundException("Order not found"));
+
+        // Fill up new Data (date and orderStatus)
+        order.setOrderDate(LocalDate.now());
+        order.setOrderStatus(orderRequest.getOrderStatus());
+
+        // track existing items {pid: qty}
+        Map<Long, Integer> existingItems = new HashMap<>();
+        List<Long> itemsToRemove = new ArrayList<>();
+        for (OrderItem item : order.getOrderItems()) {
+            existingItems.put(item.getProduct().getProductId(), item.getQuantity());
+            itemsToRemove.add(item.getId());
+        }
+
+        order.getOrderItems().clear();
+        order.setTotalAmount(BigDecimal.ZERO);
+
+        for (OrderRequest.OrderItemRequest newItem : orderRequest.getOrderedItems()) {
+            if (newItem.getQuantity() == 0)
+                continue;
+            Product product = productRepository.findById(newItem.getProductId())
+                    .orElseThrow(() -> new NotFoundException("Product not found for id: " + newItem.getProductId()));
+
+            int newQuantity = newItem.getQuantity();
+            int existingQuantity = existingItems.getOrDefault(product.getProductId(), 0);
+            int quantityDifference = newQuantity - existingQuantity;
+            System.out.println("EXISTING QTY: " + existingQuantity);
+
+            if (quantityDifference > 0 && product.getQuantity() < quantityDifference) {
+                throw new InsufficientQuantityException("Requested quantity exceeds available quantity");
+            }
+
+            product.setQuantity(product.getQuantity() - quantityDifference);
+            productRepository.save(product);
+
+            OrderItem updatedItem = new OrderItem(product, newQuantity, product.getPrice().multiply(BigDecimal.valueOf(newQuantity)));
+            order.getOrderItems().add(updatedItem);
+            order.setTotalAmount(order.getTotalAmount().add(updatedItem.getPrice()));
+        }
+        orderRepository.save(order);
+        itemsToRemove.forEach(orderItemRepository::deleteById);
+        return convertToOrderResponse(order);
+    }
+
+    @Transactional
+    @Override
     public int importOrdersFromCsv(MultipartFile file) {
         Map<Long, Order> orderMap = new HashMap<>();
 
@@ -161,5 +215,49 @@ public class OrderService implements IOrderService {
         } catch (Exception e) {
             throw new CSVImportException("Error processing CSV file " + e.getMessage());
         }
+    }
+
+    @Override
+    public byte[] exportOrdersToCsv() {
+        List<Order> orders = orderRepository.findAll();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        try (CSVWriter writer = new CSVWriter(new OutputStreamWriter(outputStream))) {
+
+            writer.writeNext(new String[]{String.format("As of %s: ", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a")))});
+            writer.writeNext(new String[]{"Order ID", "Order Date", "Order Status", "Total Amount", "Product Id", "Product Name", "Description", "Price", "Quantity"});
+
+            for (Order order : orders) {
+                int index = 0;
+
+                for (OrderItem orderItem : order.getOrderItems()) {
+                    writer.writeNext(new String[]{
+                            String.valueOf(order.getOrderId()),
+                            String.valueOf(order.getOrderDate()),
+                            String.valueOf(order.getOrderStatus()),
+                            String.valueOf(order.getOrderItems().get(index).getPrice()),
+                            String.valueOf(order.getOrderItems().get(index).getProduct().getProductId()),
+                            String.valueOf(order.getOrderItems().get(index).getProduct().getProductName()),
+                            String.valueOf(order.getOrderItems().get(index).getProduct().getDescription()),
+                            String.valueOf(order.getOrderItems().get(index).getProduct().getPrice()),
+                            String.valueOf(order.getOrderItems().get(index).getQuantity()),
+                    });
+                    index++;
+                }
+            }
+
+            writer.flush();
+
+            return outputStream.toByteArray();
+        } catch (IOException e) {
+            throw new CSVImportException("Error exporting orders to CSV file " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void deleteOrderById(Long orderId) {
+        if (!orderRepository.existsById(orderId))
+            throw new NotFoundException("Order not found for ID: " + orderId);
+        orderRepository.deleteById(orderId);
     }
 }

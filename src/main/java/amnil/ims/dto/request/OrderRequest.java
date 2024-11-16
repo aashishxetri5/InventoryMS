@@ -1,6 +1,8 @@
 package amnil.ims.dto.request;
 
 import amnil.ims.enums.OrderStatus;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,13 +20,14 @@ public class OrderRequest {
 
     private OrderStatus orderStatus;
 
-    private List<OrderItemRequest> orderedItems;
+    private List<@Valid OrderItemRequest> orderedItems;
 
     @Data
     @AllArgsConstructor
     @Builder
     public static class OrderItemRequest {
         private Long productId;
+        @Min(value = 1, message = "Quantity must be a positive value.")
         private int quantity;
     }
 
