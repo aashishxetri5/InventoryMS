@@ -5,7 +5,7 @@ import amnil.ims.dto.response.ApiResponse;
 import amnil.ims.dto.response.ProductsBySupplierDto;
 import amnil.ims.dto.response.SupplierResponse;
 import amnil.ims.enums.Status;
-import amnil.ims.service.product.ProductService;
+import amnil.ims.service.product.IProductService;
 import amnil.ims.service.supplier.ISupplierService;
 import amnil.ims.utils.FileResponseUtil;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +23,10 @@ import java.util.List;
 public class SupplierController {
 
     private final ISupplierService supplierService;
-    private final ProductService productService;
+    private final IProductService productService;
 
     /**
      * Saves new supplier info
-     *
-     * @param request
-     * @return
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping({"/new"})
@@ -47,8 +44,6 @@ public class SupplierController {
 
     /**
      * Gets list of all the suppliers
-     *
-     * @return
      */
     @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @GetMapping({"", "/"})
@@ -67,10 +62,6 @@ public class SupplierController {
 
     /**
      * Change status of a supplier from ACTIVE to INACTIVE and vice versa.
-     *
-     * @param supplierId
-     * @param newStatus
-     * @return
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/changeStatus/{supplierId}")
@@ -88,11 +79,6 @@ public class SupplierController {
     }
 
 
-    /**
-     * @param supplierId
-     * @param request
-     * @return
-     */
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/update/{supplierId}")
     public ResponseEntity<?> updateSupplier(@PathVariable Long supplierId, @RequestBody SupplierRequest request) {
