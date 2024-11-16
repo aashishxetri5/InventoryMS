@@ -24,58 +24,32 @@ public class ProductController {
     @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @PostMapping("/new")
     public ResponseEntity<?> addNewProduct(@RequestBody ProductRequest request) {
-        try {
-            ProductResponse response = productService.saveProduct(request);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(new ApiResponse("Product Added Successfully", response));
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("INTERNAL SERVER ERROR", e.getMessage()));
-        }
+        ProductResponse response = productService.saveProduct(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponse("Product Added Successfully", response));
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @GetMapping("/all")
     public ResponseEntity<?> getAllProducts() {
-        try {
-            List<ProductResponse> response = productService.getAllProducts();
-
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ApiResponse("Fetched products successfully", response));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("Something went wrong", e.getMessage()));
-        }
+        List<ProductResponse> response = productService.getAllProducts();
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse("Fetched products successfully", response));
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @GetMapping("/{productId}")
     public ResponseEntity<?> getProductById(@PathVariable Long productId) {
-        try {
-
-            ProductResponse response = productService.getProductById(productId);
-
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ApiResponse("Product fetched successfully", response));
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("Something went wrong", e.getMessage()));
-        }
+        ProductResponse response = productService.getProductById(productId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse("Product fetched successfully", response));
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @DeleteMapping("/delete/{productId}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long productId) {
-        try {
-            productService.deleteProductById(productId);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("Something went wrong", e.getMessage()));
-        }
+        productService.deleteProductById(productId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
@@ -96,15 +70,9 @@ public class ProductController {
     @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @PostMapping("/import")
     public ResponseEntity<?> importProductsFromCsv(@RequestParam("productCsv") MultipartFile file) {
-        try {
-            int numberOfImports = productService.importProductsFromCsv(file);
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ApiResponse("Success", "Successfully imported " + numberOfImports + " products."));
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("Something went wrong", e.getMessage()));
-        }
+        int numberOfImports = productService.importProductsFromCsv(file);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse("Success", "Successfully imported " + numberOfImports + " products."));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

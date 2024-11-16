@@ -8,6 +8,7 @@ import amnil.ims.enums.Status;
 import amnil.ims.service.product.IProductService;
 import amnil.ims.service.supplier.ISupplierService;
 import amnil.ims.utils.FileResponseUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,16 +31,10 @@ public class SupplierController {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping({"/new"})
-    public ResponseEntity<?> saveSupplier(@RequestBody SupplierRequest request) {
-        try {
-            SupplierResponse response = supplierService.saveSupplier(request);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(new ApiResponse("Product Added Successfully", response));
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("Something went wrong", e.getMessage()));
-        }
+    public ResponseEntity<?> saveSupplier(@Valid @RequestBody SupplierRequest request) {
+        SupplierResponse response = supplierService.saveSupplier(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponse("Product Added Successfully", response));
     }
 
     /**
@@ -48,16 +43,9 @@ public class SupplierController {
     @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @GetMapping({"", "/"})
     public ResponseEntity<?> getAllSuppliers() {
-        try {
-            List<SupplierResponse> response = supplierService.getSuppliers();
-
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ApiResponse("Suppliers fetched successfully", response));
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("Something went wrong", e.getMessage()));
-        }
+        List<SupplierResponse> response = supplierService.getSuppliers();
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse("Suppliers fetched successfully", response));
     }
 
     /**
@@ -66,30 +54,18 @@ public class SupplierController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/changeStatus/{supplierId}")
     public ResponseEntity<?> Supplier(@PathVariable Long supplierId, @RequestParam Status newStatus) {
-        try {
-            SupplierResponse response = supplierService.updateSupplierStatus(supplierId, newStatus);
-
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ApiResponse("Supplier status changed successfully!", response));
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("Something went wrong", e.getMessage()));
-        }
+        SupplierResponse response = supplierService.updateSupplierStatus(supplierId, newStatus);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse("Supplier status changed successfully!", response));
     }
 
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/update/{supplierId}")
     public ResponseEntity<?> updateSupplier(@PathVariable Long supplierId, @RequestBody SupplierRequest request) {
-        try {
-            SupplierResponse response = supplierService.updateSupplier(supplierId, request);
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ApiResponse("Updated successfully", response));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("Something went wrong", e.getMessage()));
-        }
+        SupplierResponse response = supplierService.updateSupplier(supplierId, request);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse("Updated successfully", response));
     }
 
     /**
@@ -99,22 +75,15 @@ public class SupplierController {
     @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @GetMapping("/products")
     public ResponseEntity<?> productsBySupplier(@RequestParam Long supplierId) {
-        try {
+        List<ProductsBySupplierDto> productsBySupplierResponse = productService.getProductsBySupplier(supplierId);
 
-            List<ProductsBySupplierDto> productsBySupplierResponse = productService.getProductsBySupplier(supplierId);
-
-            if (productsBySupplierResponse.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.OK)
-                        .body(new ApiResponse(HttpStatus.OK.toString(), "No products found for the specified supplier."));
-            }
-
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ApiResponse("Products fetched successfully", productsBySupplierResponse));
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("Something went wrong", e.getMessage()));
+        if (productsBySupplierResponse.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                    .body(new ApiResponse(HttpStatus.NO_CONTENT.toString(), "No products found for the specified supplier."));
         }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse("Products fetched successfully", productsBySupplierResponse));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -126,15 +95,8 @@ public class SupplierController {
     @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @PostMapping("/import")
     public ResponseEntity<?> importSupplier(@RequestParam("supplierCsv") MultipartFile file) {
-        try {
-            int numberOfImports = supplierService.importSuppliersFromCsv(file);
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ApiResponse("Success", "Successfully imported " + numberOfImports + " suppliers."));
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("Something went wrong", e.getMessage()));
-        }
-
+        int numberOfImports = supplierService.importSuppliersFromCsv(file);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse("Success", "Successfully imported " + numberOfImports + " suppliers."));
     }
 }

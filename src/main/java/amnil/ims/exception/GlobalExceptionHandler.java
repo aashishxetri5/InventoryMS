@@ -22,6 +22,36 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
+    @ExceptionHandler(CSVImportException.class)
+    public ResponseEntity<?> handleCsvImportException(CSVImportException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ApiResponse("Error Processing CSV file", ex.getMessage()));
+    }
+
+    @ExceptionHandler(CSVExportException.class)
+    public ResponseEntity<?> handleCsvExportException(CSVImportException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ApiResponse("Error exporting CSV file", ex.getMessage()));
+    }
+
+    @ExceptionHandler(DuplicateRecordException.class)
+    public ResponseEntity<?> handleDuplicateRecordException(DuplicateRecordException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ApiResponse("Duplicate Record", ex.getMessage()));
+    }
+
+    @ExceptionHandler(InsufficientQuantityException.class)
+    public ResponseEntity<?> handleInsufficientQuantityException(InsufficientQuantityException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ApiResponse("Insufficient Quantity", ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidInputFormatException.class)
+    public ResponseEntity<?> handleInvalidInputFormatException(InvalidInputFormatException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ApiResponse("Invalid Input", ex.getMessage()));
+    }
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiResponse> handleNotFoundException(NotFoundException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
