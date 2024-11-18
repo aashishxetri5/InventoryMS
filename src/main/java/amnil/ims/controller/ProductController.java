@@ -1,10 +1,12 @@
 package amnil.ims.controller;
 
 import amnil.ims.dto.request.ProductRequest;
+import amnil.ims.dto.request.ProductRestockRequest;
 import amnil.ims.dto.response.ApiResponse;
 import amnil.ims.dto.response.ProductResponse;
 import amnil.ims.service.product.IProductService;
 import amnil.ims.utils.FileResponseUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +25,7 @@ public class ProductController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @PostMapping("/new")
-    public ResponseEntity<?> addNewProduct(@RequestBody ProductRequest request) {
+    public ResponseEntity<?> addNewProduct(@Valid @RequestBody ProductRequest request) {
         ProductResponse response = productService.saveProduct(request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ApiResponse("Product Added Successfully", response));
@@ -54,7 +56,7 @@ public class ProductController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @PutMapping("/update/{productId}")
-    public ResponseEntity<?> updateProduct(@PathVariable Long productId, @RequestBody ProductRequest request) {
+    public ResponseEntity<?> updateProduct(@PathVariable Long productId, @Valid @RequestBody ProductRequest request) {
         try {
 
             ProductResponse response = productService.updateProduct(productId, request);
@@ -81,5 +83,12 @@ public class ProductController {
         return FileResponseUtil.getResponseEntity(productService.exportToCsv(), "Products.csv");
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    @PostMapping("/restock")
+    public ResponseEntity<?> restockProduct(@Valid @RequestBody ProductRestockRequest request) {
+        ProductResponse response = productService.restockProductIntoInventory(request);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse("Product re-stocked successfully", response));
+    }
 
 }

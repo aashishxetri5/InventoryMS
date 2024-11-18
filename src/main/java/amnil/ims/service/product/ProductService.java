@@ -1,6 +1,7 @@
 package amnil.ims.service.product;
 
 import amnil.ims.dto.request.ProductRequest;
+import amnil.ims.dto.request.ProductRestockRequest;
 import amnil.ims.dto.response.ProductResponse;
 import amnil.ims.dto.response.ProductsBySupplierDto;
 import amnil.ims.exception.CSVExportException;
@@ -13,6 +14,7 @@ import amnil.ims.repository.SupplierRepository;
 import amnil.ims.service.supplier.ISupplierService;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,7 +23,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -170,5 +171,18 @@ public class ProductService implements IProductService {
             throw new CSVExportException("There was a problem exporting CSV " + e.getMessage());
         }
 
+    }
+
+    @Override
+    public ProductResponse restockProductIntoInventory(@Valid ProductRestockRequest request) {
+        return productRepository.findById(request.getProductId())
+                .map(
+                        product -> {
+                            product.setQuantity(product.getQuantity() + request.getQuantity());
+                            productRepository.save(product);
+                            return productResponseBuilder(product);
+                        }
+                )
+                .orElseThrow(() -> new NotFoundException("Failed to restock!! Product doesn't exist."));
     }
 }
