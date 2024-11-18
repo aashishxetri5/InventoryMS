@@ -1,7 +1,6 @@
 package amnil.ims.dto.response;
 
 import amnil.ims.enums.Role;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -15,6 +14,14 @@ public class UserResponse {
     private String email;
     private Set<Role> roles;
     private String jwtToken;
+
+    public UserResponse(Long userId, String fullname, String email, Set<Role> roles, String jwtToken) {
+        this.userId = userId;
+        this.fullname = fullname;
+        this.email = email;
+        this.roles = roles;
+        this.jwtToken = jwtToken;
+    }
 
     public UserResponse(Long userId, String fullname, String email, Set<Role> roles) {
         this.userId = userId;
