@@ -2,6 +2,8 @@ package amnil.ims.model;
 
 import amnil.ims.enums.Role;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -9,6 +11,8 @@ import java.util.Set;
 
 @RequiredArgsConstructor
 @Data
+@AllArgsConstructor
+@Builder
 @Entity
 public class User {
     @Id
@@ -27,6 +31,12 @@ public class User {
 
     public User(String fullname, String email, String password, Set<Role> roles) {
         this.fullname = fullname;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
+
+    public User(String email, String password, Set<Role> roles) {
         this.email = email;
         this.password = password;
         this.roles = roles;
