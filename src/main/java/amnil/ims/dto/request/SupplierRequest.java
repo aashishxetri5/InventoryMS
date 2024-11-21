@@ -1,24 +1,24 @@
 package amnil.ims.dto.request;
 
 import amnil.ims.enums.Status;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NonNull;
 
 @Data
 @Builder
 @AllArgsConstructor
 public class SupplierRequest {
-    @NonNull
+    @NotNull(message = "supplier cannot be null")
     private String supplierName;
 
-    @NonNull
+    @NotNull(message = "email cannot be null")
     private String email;
 
-    @NonNull
+    @NotNull(message = "phone number cannot be null")
     private String phoneNumber;
 
-    @NonNull
+    @NotNull(message = "status cannot be null")
     private Status status;
 }
