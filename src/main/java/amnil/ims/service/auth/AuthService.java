@@ -5,7 +5,7 @@ import amnil.ims.dto.auth.SignupRequest;
 import amnil.ims.dto.response.UserResponse;
 import amnil.ims.enums.Role;
 import amnil.ims.model.User;
-import amnil.ims.security.jwt.JwtService;
+import amnil.ims.security.jwt.IJwtService;
 import amnil.ims.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,7 +25,7 @@ public class AuthService implements IAuthService {
 
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
-    private final JwtService jwtService;
+    private final IJwtService jwtService;
 
 
     @Override
