@@ -52,7 +52,7 @@ public class OrderController {
     public ResponseEntity<?> importOrders(@RequestParam("ordersCsv") MultipartFile file) {
         int numberOfImports = orderService.importOrdersFromCsv(file);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new ApiResponse("Success", "Successfully imported " + numberOfImports + " products."));
+                .body(new ApiResponse("Success", "Successfully imported " + numberOfImports + " orders."));
     }
 
     @GetMapping("/export")

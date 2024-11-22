@@ -5,6 +5,7 @@ import amnil.ims.dto.auth.SignupRequest;
 import amnil.ims.dto.response.ApiResponse;
 import amnil.ims.dto.response.UserResponse;
 import amnil.ims.service.auth.IAuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class AuthController {
 
     @PreAuthorize("isAnonymous()")
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
         if (request == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse("error", "Email and passwords cannot be null"));

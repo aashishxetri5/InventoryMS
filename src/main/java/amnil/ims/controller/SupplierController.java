@@ -34,7 +34,7 @@ public class SupplierController {
     public ResponseEntity<?> saveSupplier(@Valid @RequestBody SupplierRequest request) {
         SupplierResponse response = supplierService.saveSupplier(request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ApiResponse("Product Added Successfully", response));
+                .body(new ApiResponse("Supplier Added Successfully", response));
     }
 
     /**

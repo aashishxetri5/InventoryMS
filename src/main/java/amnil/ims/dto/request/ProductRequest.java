@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 @Builder
 public class ProductRequest {
 
-    @NotNull
     private Long productId;
 
     @NotNull
