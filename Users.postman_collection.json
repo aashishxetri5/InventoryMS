@@ -1,0 +1,19 @@
+{
+	"info": {
+		"_postman_id": "d46aab9e-71bc-44b5-8420-d48ac1c028a0",
+		"name": "Users",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30302423",
+		"_collection_link": "https://devops-1230.postman.co/workspace/30465257-1df2-4bd1-b4a9-1d879a0a5b84/collection/30302423-d46aab9e-71bc-44b5-8420-d48ac1c028a0?action=share&source=collection_link&creator=30302423"
+	},
+	"item": [
+		{
+			"name": "Get All user",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}

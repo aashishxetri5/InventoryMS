@@ -1,0 +1,306 @@
+{
+	"info": {
+		"_postman_id": "d4d8c2b9-0c2e-49cb-b790-e8f00e01bebf",
+		"name": "Product",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30302423",
+		"_collection_link": "https://devops-1230.postman.co/workspace/30465257-1df2-4bd1-b4a9-1d879a0a5b84/collection/30302423-d4d8c2b9-0c2e-49cb-b790-e8f00e01bebf?action=share&source=collection_link&creator=30302423"
+	},
+	"item": [
+		{
+			"name": "Save product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha0BnbWFpbC5jb20iLCJpYXQiOjE3MzIyNTg0NzUsImV4cCI6MTczMjI2NTY3NX0.L5xWuFaaEgEeIw53T5p-dv5PPvZ55W_J7mnOzYOt4Pg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"productName\": \"Asus CPU Casing\",\r\n  \"description\": \"Metal Panel with RGB lights\",\r\n  \"price\": 60000,\r\n  \"quantity\": 2,\r\n  \"supplier\": {\r\n    \"supplierId\": 2\r\n  }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/secure/product/new",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"secure",
+						"product",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Products",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha0BnbWFpbC5jb20iLCJpYXQiOjE3MzIyNTg0NzUsImV4cCI6MTczMjI2NTY3NX0.L5xWuFaaEgEeIw53T5p-dv5PPvZ55W_J7mnOzYOt4Pg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/secure/product/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"secure",
+						"product",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Product By Id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha0BnbWFpbC5jb20iLCJpYXQiOjE3MzIyNTg0NzUsImV4cCI6MTczMjI2NTY3NX0.L5xWuFaaEgEeIw53T5p-dv5PPvZ55W_J7mnOzYOt4Pg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/secure/product/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"secure",
+						"product",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha0BnbWFpbC5jb20iLCJpYXQiOjE3MzIyNTg0NzUsImV4cCI6MTczMjI2NTY3NX0.L5xWuFaaEgEeIw53T5p-dv5PPvZ55W_J7mnOzYOt4Pg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"productName\": \"Asus Zenbook 2021\",\r\n    \"description\": \"High-performance laptop for Designers\",\r\n    \"price\": 120000.00,\r\n    \"quantity\": 13,\r\n    \"supplier\": {\r\n        \"supplierId\": 2\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/secure/product/update/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"secure",
+						"product",
+						"update",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha0BnbWFpbC5jb20iLCJpYXQiOjE3MzIyNTg0NzUsImV4cCI6MTczMjI2NTY3NX0.L5xWuFaaEgEeIw53T5p-dv5PPvZ55W_J7mnOzYOt4Pg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/secure/product/delete/12",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"secure",
+						"product",
+						"delete",
+						"12"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Restock",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha0BnbWFpbC5jb20iLCJpYXQiOjE3MzIyNTg0NzUsImV4cCI6MTczMjI2NTY3NX0.L5xWuFaaEgEeIw53T5p-dv5PPvZ55W_J7mnOzYOt4Pg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"productId\": 1,\r\n    \"quantity\": 5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/secure/product/restock",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"secure",
+						"product",
+						"restock"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Import CSV",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha0BnbWFpbC5jb20iLCJpYXQiOjE3MzIyNTg0NzUsImV4cCI6MTczMjI2NTY3NX0.L5xWuFaaEgEeIw53T5p-dv5PPvZ55W_J7mnOzYOt4Pg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "productCsv",
+							"type": "file",
+							"src": "/C:/Users/asus/Downloads/Meds.csv"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/secure/product/import",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"secure",
+						"product",
+						"import"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Export CSV",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha0BnbWFpbC5jb20iLCJpYXQiOjE3MzIyNTg0NzUsImV4cCI6MTczMjI2NTY3NX0.L5xWuFaaEgEeIw53T5p-dv5PPvZ55W_J7mnOzYOt4Pg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/secure/product/export",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"secure",
+						"product",
+						"export"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
